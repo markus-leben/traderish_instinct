@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Add icon library -->
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+<style>
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+
+.btn2 {
+  background-color: LightCoral;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btn2:hover {
+  background-color: Crimson;
+}
+
+.parent{
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 146px;
+  height: 204px;
+}
+.image1 {
+  position: relative;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: fill;
+}
+.image2 {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: fill;
+
+  opacity: 1.0;
+}
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+    <script src="https://kit.fontawesome.com/d382bae47e.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    Enter a card:
+                </h1>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                {{  form  }}
+                            </div>
+                            <div class="control">
+                                <button type="sumbit" class="button is-info">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-1 is-10">
+                    {% for curr_card in card_search_arr %}
+                    {% if forloop.counter0|divisibleby:3 %}
+<!--                    <div class="box">-->
+                            <article class="media">
+                                {% endif %}
+                                <div class="box">
+                                <a href="{% url 'save_card' curr_card.url curr_card.foil %}">
+                                    <div class="media-left">
+                                        {% if curr_card.foil == "nonfoil"%}
+                                            <img src={{ curr_card.small_img }} alt="{{ curr_card.name }}">
+                                        {% else %}
+                                            <div class="parent">
+                                              <img class="image1" src={{ curr_card.small_img }}/>
+                                              <img class="image2" src="https://s.tappedout.net/s1/img/foil-card-overlay-2.png" alt="{{ curr_card.name }}"/>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p>
+                                                <span class="title">{{ curr_card.name }}</span>
+                                                <br>
+                                                <span class="subtitle">{{ curr_card.set}}</span>
+<!--                                                <br> {{ curr_card.text }}-->
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                                </div>
+                            {% if forloop.counter0|add:"1"|divisibleby:3 %}
+                            </article>
+<!--                    </div>-->
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-1 is-7">
+                    <table style="width:100%">
+                        <tr>
+                            <th>Name </th>
+                            <th>Set </th>
+                            <th>Foil Type</th>
+                            <th>Delete?</th>
+
+
+                        </tr>
+                        {% for saved_card in saved_card_arr %}
+                        <tr>
+                            <td>{{ saved_card.name }}</td>
+                            <td>{{ saved_card.set }}</td>
+                            <td>{{ saved_card.foil }}</td>
+                            <td>
+                                <a href="{% url 'delete_row' forloop.counter0 %}">
+                                    <i class="fa-solid fa-delete-left"></i>
+<!--                                    <button class="delete"></button>-->
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+                <a class="btn" href="{% url 'save_ebay_csv' %}"><i class="fa fa-download"></i> Download eBay Spreadsheet</a>
+                <a class="btn2" href="{% url 'delete_all' %}"><i class="fa-solid fa-delete-left"></i> Delete All Rows</a>
+        </div>
+<!--        <div class="parent">-->
+<!--          <img class="image1" src="https://c1.scryfall.com/file/scryfall-cards/normal/front/e/3/e3285e6b-3e79-4d7c-bf96-d920f973b122.jpg"/>-->
+<!--          <img class="image2" src="https://s.tappedout.net/s1/img/foil-card-overlay-2.png"/>-->
+<!--        </div>-->
+    </section>
+    <footer class="footer">
+        <div>
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a coffe as a thanks', '#29abe0', 'B0B1C4GE0');kofiwidget2.draw();</script>
+        </div>
+        <div>
+            <a href="mailto:markus_leben@mac.com?subject=Traderish Instinct eBay Tool">Email me with critiques or bug reports</a>
+        </div>
+
+    </footer>
+</body>
+
+</html>
