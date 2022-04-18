@@ -1,0 +1,1 @@
+web: gunicorn traderish_instinct.wsgi
