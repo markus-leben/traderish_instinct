@@ -250,7 +250,7 @@ def send_ebay_csv(request):
             row_dict['*Title'] = '%s %s NM' % (i['name'], i['set'])
             if len(row_dict['*Title']) > 80:
                 row_dict['*Title'] = row_dict['*Title'][:79]
-            row_dict['*StartPrice'] = '0.01'
+            row_dict['*StartPrice'] = str(i['scryf_data']['prices']['usd'])
             row_dict['*Description'] = "Listed automatically using Traderish Instinct and Scryfall's API. \n" \
                                        "Please note that the card images are stock images. \n" \
                                        "More images available on request. \n"
