@@ -203,6 +203,7 @@ def send_ebay_csv(request):
 
                 '*Category',
                 '*Format',
+                'BestOfferEnabled',
                 '*Duration',
                 '*Quantity',
                 '*ReturnsAcceptedOption',
@@ -257,6 +258,8 @@ def send_ebay_csv(request):
 
             row_dict['*Category'] = "183454"
             row_dict['*Format'] = 'FixedPrice'
+            row_dict['BestOfferEnabled'] = '1'
+
             row_dict['*Duration'] = 'GTC'
             row_dict['*Quantity'] = '1'
             row_dict['*ReturnsAcceptedOption'] = 'ReturnsAccepted'
